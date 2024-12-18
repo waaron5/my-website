@@ -1,0 +1,37 @@
+/* Set the background color and center all content */
+body {
+  background-color: lightblue; /* Light blue background */
+  color: black; /* Black text */
+  font-family: Arial, sans-serif; /* Clean, modern font */
+  display: flex; /* Enable flexbox for centering */
+  flex-direction: column; /* Stack elements vertically */
+  justify-content: center; /* Center content vertically */
+  align-items: center; /* Center content horizontally */
+  height: 100vh; /* Full viewport height */
+  margin: 0; /* Remove default margin */
+  text-align: center; /* Center align text */
+}
+
+/* Center the title */
+h1 {
+  margin-bottom: 20px; /* Space between title and links */
+  font-size: 3rem; /* Make the title larger */
+}
+
+/* Style the links */
+a {
+  color: black; /* Black link color */
+  text-decoration: none; /* Remove underline */
+  font-size: 1.5rem; /* Increase link size */
+  margin: 0 10px; /* Add spacing between links */
+}
+
+a:hover {
+  text-decoration: underline; /* Underline on hover */
+}
+
+/* Style the game container */
+.game-container {
+  margin-top: 20px; /* Space between links and game */
+}
+

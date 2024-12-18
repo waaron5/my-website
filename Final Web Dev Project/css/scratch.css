@@ -1,0 +1,125 @@
+/* General Reset and Basic Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif; /* Clean font */
+}
+
+body {
+    background-color: lightblue; /* Light blue background */
+    color: #333; /* Dark gray text for better readability */
+    line-height: 1.6; /* Improve spacing between lines */
+    margin: 0 auto; /* Center the page */
+    max-width: 1200px; /* Prevent the content from being too wide */
+    padding: 20px;
+}
+
+/* Navigation Bar Styling */
+nav {
+    background-color: #f4f4f4; /* Light gray background */
+    text-align: center;
+    padding: 10px 0;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+}
+
+nav a {
+    text-decoration: none;
+    color: #007BFF; /* Attractive blue links */
+    margin: 0 15px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #0056b3; /* Darker blue for hover effect */
+}
+
+/* Title at the Top */
+#about h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #222; /* Darker title */
+    margin-bottom: 10px;
+}
+
+#about p {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+/* Layout Styling */
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap: 20px; /* Space between grid items */
+    align-items: start;
+    margin-bottom: 30px;
+}
+
+/* Left Column (List and YouTube) */
+.left {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between elements */
+}
+
+ol {
+    margin-left: 20px;
+}
+
+ul {
+    margin-left: 20px;
+    list-style: square; /* Make sublist look nice */
+}
+
+iframe {
+    border-radius: 8px; /* Slight curve for modern feel */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+/* Right Column (Image) */
+.right img {
+    width: 100%;
+    max-width: 600px; /* Ensure image doesn't get too big */
+    display: block;
+    margin: 0 auto; /* Center the image */
+    border-radius: 8px; /* Round corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Tableau Graph at the Bottom */
+.tableau-container {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.tableau-container iframe {
+    width: 90%;
+    max-width: 800px;
+    height: 600px;
+    border: none;
+    margin: 0 auto;
+    display: block;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+}
+
+/* Footer Styling */
+footer {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 2px solid #ddd;
+    font-size: 0.9rem;
+}
+
+footer a {
+    text-decoration: none;
+    color: #007BFF;
+}
+
+footer a:hover {
+    color: #0056b3;
+}

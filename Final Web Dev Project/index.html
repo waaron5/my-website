@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    
+        
+            <title>Mini Game</title>
+            <link rel="stylesheet" href="css/styles.css">
+        
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Personal - Start Bootstrap Theme</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <!-- Custom Google font-->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+    </head>
+    <div class="col-xxl-7">
+        <!-- Header Section: Links & Title -->
+        <div class="text-center mb-4">
+            <h1>MINI GAME</h1>
+            <div class="d-flex justify-content-center gap-4">
+                <a href="resume.html" class="btn btn-primary">Resume</a>
+                <a href="#" class="btn btn-secondary">Mini Game</a>
+            </div>
+        </div>
+
+                <!-- Game Code -->
+<div class="game-container" style="position: relative;">
+    <!-- Game Canvas -->
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
+
+    <!-- Start Button -->
+    <div id="startScreen" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+        <button id="startButton" style="font-size: 24px; padding: 15px 30px;">Start Game</button>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="gameOverScreen" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; display: none;">
+        <h2>Game Over</h2>
+        <button id="restartButton" style="font-size: 24px; padding: 15px 30px;">Restart Game</button>
+    </div>
+
+    <!-- Score Counter -->
+    <div id="scoreCounter" style="position: absolute; top: 10px; left: 10px; font-size: 20px; color: black;">
+        Score: 0
+    </div>
+</div>
+
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const startButton = document.getElementById('startButton');
+    const restartButton = document.getElementById('restartButton');
+    const startScreen = document.getElementById('startScreen');
+    const gameOverScreen = document.getElementById('gameOverScreen');
+    const scoreCounter = document.getElementById('scoreCounter');
+
+    let gameRunning = false;
+    let score = 0;
+
+    let ball = {
+        x: 50,
+        y: 330,
+        radius: 20,
+        color: 'blue',
+        gravity: 1,
+        lift: -15,
+        velocity: 0
+    };
+
+    let obstacles = [];
+    let obstacleWidth = 20;
+    let obstacleHeight = 50;
+    let obstacleSpeed = 8; // Slightly faster speed for more challenge
+    let obstacleFrequency = 2000; // Reduced time for more hurdles
+    let lastObstacleTime = 0;
+
+    let isJumping = false;
+    let groundHeight = 20;
+
+    document.addEventListener('keydown', function (event) {
+        if (event.code === 'Space' && gameRunning && ball.y === canvas.height - groundHeight - ball.radius) {
+            ball.velocity = ball.lift;
+            isJumping = true;
+        }
+    });
+
+    function drawBall() {
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+        ctx.fillStyle = ball.color;
+        ctx.fill();
+        ctx.closePath();
+    }
+
+    function drawObstacles() {
+        for (let i = 0; i < obstacles.length; i++) {
+            let obstacle = obstacles[i];
+            ctx.fillStyle = 'black'; // Hurdles are black
+            ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacleHeight);
+        }
+    }
+
+    function moveObstacles() {
+        for (let i = 0; i < obstacles.length; i++) {
+            obstacles[i].x -= obstacleSpeed;
+
+            if (obstacles[i].x + obstacles[i].width < 0) {
+                obstacles.splice(i, 1);
+                score++; // Increment score when an obstacle moves out of view
+                scoreCounter.textContent = `Score: ${score}`;
+                i--;
+            }
+        }
+    }
+
+    function generateObstacles() {
+        const now = Date.now();
+        if (now - lastObstacleTime > obstacleFrequency) {
+            let width = obstacleWidth;
+
+            // Randomly make some obstacles double width
+            if (Math.random() < 0.2) { // 20% chance
+                width *= 2;
+            }
+
+            obstacles.push({
+                x: canvas.width,
+                y: canvas.height - groundHeight - obstacleHeight,
+                width: width
+            });
+
+            lastObstacleTime = now;
+        }
+    }
+
+    function drawGround() {
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height - groundHeight);
+        ctx.lineTo(canvas.width, canvas.height - groundHeight);
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+    }
+
+    function checkCollisions() {
+        for (let i = 0; i < obstacles.length; i++) {
+            if (
+                ball.x + ball.radius > obstacles[i].x &&
+                ball.x - ball.radius < obstacles[i].x + obstacles[i].width &&
+                ball.y + ball.radius > obstacles[i].y
+            ) {
+                gameOver();
+            }
+        }
+    }
+
+    function gameOver() {
+        gameRunning = false;
+        gameOverScreen.style.display = 'block';
+    }
+
+    function resetGame() {
+        ball.y = canvas.height - groundHeight - ball.radius;
+        ball.velocity = 0;
+        obstacles = [];
+        score = 0;
+        scoreCounter.textContent = `Score: ${score}`;
+        gameOverScreen.style.display = 'none';
+    }
+
+    function updateBallPosition() {
+        ball.velocity += ball.gravity;
+        ball.y += ball.velocity;
+
+        if (ball.y > canvas.height - groundHeight - ball.radius) {
+            ball.y = canvas.height - groundHeight - ball.radius;
+            ball.velocity = 0;
+            isJumping = false;
+        }
+    }
+
+    function gameLoop() {
+        if (!gameRunning) return;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        drawGround();
+        drawBall();
+        drawObstacles();
+        moveObstacles();
+        generateObstacles();
+        checkCollisions();
+        updateBallPosition();
+
+        requestAnimationFrame(gameLoop);
+    }
+
+    startButton.addEventListener('click', function () {
+        gameRunning = true;
+        startScreen.style.display = 'none';
+        gameLoop();
+    });
+
+    restartButton.addEventListener('click', function () {
+        resetGame();
+        gameRunning = true;
+        gameLoop();
+    });
+</script>
+
+
+
+    </div>
+    
